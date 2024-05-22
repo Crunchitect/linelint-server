@@ -1,0 +1,8 @@
+pathfinding
+opencv-contrib-python
+toml
+numpy
+flask
+clipboard
+flask-cors
+pycloudflared
