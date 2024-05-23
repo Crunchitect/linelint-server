@@ -79,21 +79,20 @@ void right_tack() {
 }
 
 void setup() {
-	cross(); right();
 	left_tack(); left();
-	right_tack(); forward();
-	left_tack(); forward();
-	cross(); left();
-	cross(); right();
-	right_tack(); right();
-	left_tack(); left();
-	cross(); right();
-	left_tack(); left();
-	cross(); right();
-	left_tack(); forward();
 	cross(); left();
 	right_tack(); right();
 	right_tack(); right();
-}
+	left_tack(); left();
+	cross(); right();
+	right_tack(); right();
+	left_tack(); left();
+	left_tack(); forward();
+	cross(); forward();
+	cross(); right();
+	cross(); left();
+	left_tack(); left();
+	right_tack(); right();
+forward();}
 
 void loop() {}

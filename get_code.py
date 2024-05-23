@@ -55,6 +55,9 @@ def main(start, end):
         if sensors in junctions_inv:
             robot_path += f'\t{junctions_inv[sensors]}(); {direction}();\n'
             print(junctions_inv[sensors], direction)
+    
+    if robot_path[-10:] != "forward();":
+        robot_path += "forward();"
 
     setup = ''
     with open("./base/sim.txt", "r") as f:

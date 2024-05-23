@@ -2,13 +2,11 @@ from thin import thin
 from get_code import main
 from flask import Flask, request
 from flask_cors import CORS
-from pycloudflared import try_cloudflare
+import subprocess
 
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
-
-url = try_cloudflare(port=5000).tunnel
 
 start = (0, 0)
 end = (0, 0)
@@ -36,7 +34,14 @@ def config():
     sy = int(request.args.get('sy'))
     ex = int(request.args.get('ex'))
     ey = int(request.args.get('ey'))
-
+    print(sx, sy, ex, ey)
     start = (sx, sy)
     end = (ex, ey)
     return "Ok!"
+
+
+@app.route("/ping")
+def ping():
+    return "Pong!"
+
+# subprocess.Popen(["cloudflared", "--"])

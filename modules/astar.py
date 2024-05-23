@@ -2,31 +2,27 @@ import cv2, numpy as np
 from pathfinding.core.diagonal_movement import DiagonalMovement
 from pathfinding.core.grid import Grid
 from pathfinding.finder.a_star import AStarFinder
+from copy import deepcopy
 
 def get_closest_black_pixel(point, maze):
-    print(point)
-    distance = 0
-    while True:
-        for x in range(distance):
-            y = distance - x
-            for sign in [[-1, -1], [1, 1], [-1, 1], [1, -1]]:
-                sx, sy = sign
-                if maze[point[1] + (sy * y)][point[0] + (sx * x)]:
-                    print([point[1] + (sy * y), point[0] + (sx * x)])
-                    return [point[0] + (sx * x), point[1] + (sy * y)]
-        distance += 1
+    nonzero = cv2.findNonZero(cv2.bitwise_not(maze))
+    distances = np.sqrt((nonzero[:,:,0] - point[0]) ** 2 + (nonzero[:,:,1] - point[1]) ** 2)
+    nearest_index = np.argmin(distances)
+    print(nonzero[nearest_index])
+    return nonzero[nearest_index][0][::-1]
 
 def get_path(maze, start, end):
     matrix = cv2.cvtColor(maze, cv2.COLOR_BGR2GRAY)
     (_, matrix) = cv2.threshold(matrix, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+    matrix_p = deepcopy(matrix)
     matrix = cv2.bitwise_not(matrix).transpose().tolist()
     grid = Grid(matrix=matrix)
 
     # start = grid.node(104, 45)
     # end = grid.node(98, 434)
 
-    startx = grid.node(*get_closest_black_pixel(start, matrix))
-    endx = grid.node(*get_closest_black_pixel(end, matrix))
+    startx = grid.node(*get_closest_black_pixel(start, matrix_p))
+    endx = grid.node(*get_closest_black_pixel(end, matrix_p))
     print(startx.x, startx.y, endx.x, endx.y)
 
     finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
