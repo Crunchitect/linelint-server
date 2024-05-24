@@ -9,15 +9,17 @@ def main(start, end):
         junctions_inv = {tuple(v): k for k, v in junctions.items()}
 
     def get_condition(sensor_vals: list[int]):
-        sensor_func = []
-        # sensor_func.append(f'{"w" if sensor_vals[0] else "b"}(0)')
-        # sensor_func.append(f'{"w" if sensor_vals[2] else "b"}(2)')
-        # sensor_func.append(f'{"w" if sensor_vals[4] else "b"}(4)')
-        for i in [0, 2, 4]:
-            if sensor_vals[i]:
-                continue
-            sensor_func.append(f'b({i})')
-        return ' && '.join(sensor_func)
+        cond = ''
+        match [sensor_vals[1], sensor_vals[3]]:
+            case [0, 0]:
+                cond = 'b(1) && b(3)'
+            case [0, 1]:
+                cond = 'b(0) && b(1)'
+            case [1, 0]:
+                cond = 'b(3) && b(4)'
+            case [1, 1]:
+                return NotImplementedError
+        return cond
 
     maze = cv2.imread('jello2.png')
     path = get_path(maze, start, end)
