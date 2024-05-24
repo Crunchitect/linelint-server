@@ -2,14 +2,21 @@ from thin import thin
 from get_code import main
 from flask import Flask, request
 from flask_cors import CORS
-import subprocess
+from pycloudflared import try_cloudflare
+
 
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+url = try_cloudflare(port=5000).tunnel
+
 start = (0, 0)
 end = (0, 0)
+
+@app.route("/")
+def home():
+    return 'Server online!'
 
 @app.route("/process")
 def hello_world():
